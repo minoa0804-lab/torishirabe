@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Load</title>
+</head>
+<body>
+    <h1>Loading Test</h1>
+    <div id="status">Loading...</div>
+    <script>
+        console.log('Starting test...');
+        try {
+            // data.js読み込みテスト
+            const script1 = document.createElement('script');
+            script1.src = 'data.js';
+            script1.onerror = () => {
+                document.getElementById('status').innerHTML += '<br>❌ data.js failed to load';
+                console.error('data.js failed to load');
+            };
+            script1.onload = () => {
+                document.getElementById('status').innerHTML += '<br>✅ data.js loaded';
+                console.log('data.js loaded successfully');
+                console.log('GAME_PATTERNS:', typeof GAME_PATTERNS !== 'undefined' ? 'defined' : 'undefined');
+                
+                // game.js読み込みテスト
+                const script2 = document.createElement('script');
+                script2.src = 'game.js';
+                script2.onerror = () => {
+                    document.getElementById('status').innerHTML += '<br>❌ game.js failed to load';
+                    console.error('game.js failed to load');
+                };
+                script2.onload = () => {
+                    document.getElementById('status').innerHTML += '<br>✅ game.js loaded';
+                    console.log('game.js loaded successfully');
+                    console.log('startGame:', typeof startGame !== 'undefined' ? 'defined' : 'undefined');
+                };
+                document.head.appendChild(script2);
+            };
+            document.head.appendChild(script1);
+        } catch(e) {
+            document.getElementById('status').innerHTML += '<br>❌ Error: ' + e.message;
+            console.error('Error:', e);
+        }
+    </script>
+</body>
+</html>

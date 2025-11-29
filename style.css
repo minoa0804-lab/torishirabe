@@ -1,0 +1,547 @@
+/* 全体設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Yu Gothic', 'Hiragino Sans', 'Meiryo', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    overflow: hidden;
+    height: 100vh;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* 画面共通 */
+.screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+.screen.hidden {
+    display: none;
+    opacity: 0;
+}
+
+/* タイトル画面 */
+.title-container {
+    text-align: center;
+    color: white;
+}
+
+.game-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+    animation: titlePulse 2s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+}
+
+.title-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.menu-button {
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: white;
+    color: #667eea;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 200px;
+}
+
+.menu-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+.menu-button:active {
+    transform: translateY(0);
+}
+
+/* 難易度選択画面 */
+.menu-container {
+    background: rgba(255,255,255,0.95);
+    padding: 2rem;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.menu-container h2 {
+    text-align: center;
+    color: #667eea;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.difficulty-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.difficulty-button {
+    padding: 1.5rem;
+    border: 3px solid transparent;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s, border-color 0.2s;
+    font-family: inherit;
+}
+
+.difficulty-button:hover {
+    transform: scale(1.05);
+}
+
+.difficulty-button.easy {
+    background: linear-gradient(135deg, #90EE90, #32CD32);
+    color: white;
+}
+
+.difficulty-button.normal {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: white;
+}
+
+.difficulty-button.hard {
+    background: linear-gradient(135deg, #FF6347, #DC143C);
+    color: white;
+}
+
+.diff-label {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.diff-desc {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.back-button {
+    width: 100%;
+    padding: 1rem;
+    background: #ccc;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.back-button:hover {
+    background: #bbb;
+}
+
+/* 遊び方画面 */
+.instructions {
+    text-align: left;
+}
+
+.instruction-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.instruction-icon {
+    font-size: 2rem;
+    margin-right: 1rem;
+}
+
+.instruction-item p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.instruction-warning {
+    background: #fff3cd;
+    border-left: 4px solid #ff9800;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+}
+
+.instruction-warning p {
+    color: #856404;
+    margin: 0;
+}
+
+/* ゲーム画面 */
+#gameScreen {
+    flex-direction: column;
+    background: linear-gradient(180deg, #e8f4f8 0%, #b8d4e0 100%);
+    justify-content: flex-start;
+    padding: 0;
+}
+
+.game-header {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    color: #1a1a2e;
+    font-weight: bold;
+}
+
+.combo-text {
+    color: #ffd700;
+}
+
+/* ゲームエリア */
+.game-area {
+    flex: 1;
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* 人物シルエット */
+.person-silhouette {
+    position: absolute;
+    width: auto;
+    height: 85%;
+    max-height: 650px;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.85;
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.6));
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 心に響いた時のアニメーション */
+.person-silhouette.resonate {
+    animation: resonate 0.5s ease-out;
+}
+
+@keyframes resonate {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+/* 円コンテナ */
+.circle-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+/* 円のラッパー */
+.circle-wrapper {
+    position: absolute;
+    cursor: pointer;
+}
+
+/* ターゲット円（内側の小さい円） */
+.target-circle {
+    position: absolute;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+                inset 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* 収縮する円（外側の大きい円） */
+.shrinking-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.8;
+    transition: none;
+}
+
+.shrinking-circle.type-1 {
+    background: radial-gradient(circle, rgba(255, 100, 100, 0.7), rgba(255, 50, 50, 0.9));
+    box-shadow: 0 0 30px rgba(255, 100, 100, 0.8);
+}
+
+.shrinking-circle.type-2 {
+    background: radial-gradient(circle, rgba(100, 200, 255, 0.7), rgba(50, 150, 255, 0.9));
+    box-shadow: 0 0 30px rgba(100, 200, 255, 0.8);
+}
+
+.shrinking-circle.type-3 {
+    background: radial-gradient(circle, rgba(100, 255, 100, 0.7), rgba(50, 255, 50, 0.9));
+    box-shadow: 0 0 30px rgba(100, 255, 100, 0.8);
+}
+
+.shrinking-circle.type-4 {
+    background: radial-gradient(circle, rgba(255, 200, 100, 0.7), rgba(255, 150, 50, 0.9));
+    box-shadow: 0 0 30px rgba(255, 200, 100, 0.8);
+}
+
+.shrinking-circle.type-5 {
+    background: radial-gradient(circle, rgba(200, 100, 255, 0.7), rgba(150, 50, 255, 0.9));
+    box-shadow: 0 0 30px rgba(200, 100, 255, 0.8);
+}
+
+/* ヒット時のアニメーション */
+.circle-wrapper.hit .shrinking-circle {
+    animation: circleHit 0.3s ease forwards;
+}
+
+@keyframes circleHit {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+.circle-wrapper.miss .shrinking-circle {
+    animation: circleMiss 0.3s ease forwards;
+}
+
+@keyframes circleMiss {
+    0% { opacity: 0.8; }
+    100% { opacity: 0; }
+}
+
+/* フィードバックエリア */
+.feedback-area {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.judgment-display {
+    text-align: center;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    animation: judgmentPop 0.5s ease;
+}
+
+@keyframes judgmentPop {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0; }
+}
+
+.judgment-display.perfect {
+    color: #FFD700;
+    text-shadow: 0 0 20px #FFD700;
+}
+
+.judgment-display.good {
+    color: #4CAF50;
+    text-shadow: 0 0 20px #4CAF50;
+}
+
+.judgment-display.miss {
+    color: #F44336;
+    text-shadow: 0 0 20px #F44336;
+}
+
+/* 結果画面 */
+.result-container {
+    background: rgba(255,255,255,0.95);
+    padding: 2rem;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.result-container h2 {
+    color: #667eea;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+}
+
+.result-rank {
+    font-size: 5rem;
+    font-weight: bold;
+    margin: 1rem 0;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.result-details {
+    background: #f5f5f5;
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+    text-align: left;
+}
+
+.result-details p {
+    margin: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.result-comment {
+    background: #e3f2fd;
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 1rem 0;
+    color: #1976d2;
+    font-weight: bold;
+}
+
+.educational-message {
+    background: #fff3e0;
+    border-left: 4px solid #ff9800;
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: left;
+}
+
+.educational-message p {
+    margin: 0;
+    color: #e65100;
+    line-height: 1.6;
+}
+
+.result-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.result-buttons .menu-button {
+    flex: 1;
+    min-width: 0;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 600px) {
+    .game-title {
+        font-size: 2rem;
+    }
+    
+    .person-silhouette {
+        height: 75%;
+        max-height: 500px;
+    }
+    
+    .judgment-display {
+        font-size: 2.5rem;
+    }
+}
+
+/* 心理バーのスタイル */
+.psychology-bar-container {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    z-index: 50;
+}
+
+.bar-label {
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #1a1a2e;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+}
+
+.psychology-bar-bg {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background: rgba(255,255,255,0.9);
+    border: 3px solid #1a1a2e;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2),
+                inset 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.psychology-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 50%, #CDDC39 100%);
+    transition: width 0.5s ease-out;
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.5);
+}
+
+.psychology-bar.pulse {
+    animation: barPulse 0.3s ease;
+}
+
+@keyframes barPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.bar-percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #1a1a2e;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+    z-index: 2;
+}
+
+/* アニメーション */
+@keyframes noteHit {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+.note.hit {
+    animation: noteHit 0.3s ease forwards;
+}

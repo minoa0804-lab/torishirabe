@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聞く・話すの達人 - 取り調べコミュニケーションゲーム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- タイトル画面 -->
+    <div id="titleScreen" class="screen">
+        <div class="title-container">
+            <h1 class="game-title">聞く・話すの達人</h1>
+            <p class="subtitle">被疑者の心に響く言葉を届けよう</p>
+            <div class="title-buttons">
+                <button class="menu-button" onclick="showDifficultySelect()">スタート</button>
+                <button class="menu-button" onclick="showHowToPlay()">遊び方</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 難易度選択画面 -->
+    <div id="difficultyScreen" class="screen hidden">
+        <div class="menu-container">
+            <h2>難易度を選択</h2>
+            <div class="difficulty-buttons">
+                <button class="difficulty-button easy" onclick="startGame('easy')">
+                    <span class="diff-label">EASY</span>
+                    <span class="diff-desc">ゆっくりとした速度</span>
+                </button>
+                <button class="difficulty-button normal" onclick="startGame('normal')">
+                    <span class="diff-label">NORMAL</span>
+                    <span class="diff-desc">標準的な速度</span>
+                </button>
+                <button class="difficulty-button hard" onclick="startGame('hard')">
+                    <span class="diff-label">HARD</span>
+                    <span class="diff-desc">高速で難しい</span>
+                </button>
+            </div>
+            <button class="back-button" onclick="showTitle()">戻る</button>
+        </div>
+    </div>
+
+    <!-- 遊び方画面 -->
+    <div id="howToPlayScreen" class="screen hidden">
+        <div class="menu-container">
+            <h2>遊び方</h2>
+            <div class="instructions">
+                <div class="instruction-item">
+                    <span class="instruction-icon">🎯</span>
+                    <p>画面に浮かぶ<strong>大きな円</strong>が徐々に縮んでいきます</p>
+                </div>
+                <div class="instruction-item">
+                    <span class="instruction-icon">⭕</span>
+                    <p>内側の<strong>小さな円</strong>と同じサイズになったタイミングでクリック！</p>
+                </div>
+                <div class="instruction-item">
+                    <span class="instruction-icon">⚡</span>
+                    <p>円によって縮む速度が違います。よく見てタイミングを計りましょう</p>
+                </div>
+                <div class="instruction-item">
+                    <span class="instruction-icon">🏆</span>
+                    <p>Perfect、Good、Missの3段階で判定されます</p>
+                </div>
+            </div>
+            <button class="back-button" onclick="showTitle()">戻る</button>
+        </div>
+    </div>
+
+    <!-- ゲーム画面 -->
+    <div id="gameScreen" class="screen hidden">
+        <!-- ヘッダー情報 -->
+        <div class="game-header">
+            <div class="game-stats">
+                <span id="score">スコア：000000</span>
+                <span id="combo" class="combo-text">コンボ：0</span>
+            </div>
+        </div>
+
+        <!-- ゲームエリア -->
+        <div class="game-area" id="gameArea">
+            <!-- 椅子に座った人物のシルエット -->
+            <img src="" alt="被疑者" class="person-silhouette" id="personSilhouette">
+
+            <!-- 円が動的に追加される -->
+            <div id="circleContainer" class="circle-container"></div>
+        </div>
+
+        <!-- 判定表示 -->
+        <div class="feedback-area">
+            <div id="judgmentDisplay" class="judgment-display"></div>
+        </div>
+
+        <!-- 心理バー -->
+        <div class="psychology-bar-container">
+            <div class="bar-label">被疑者の心理状態</div>
+            <div class="psychology-bar-bg">
+                <div id="psychologyBar" class="psychology-bar"></div>
+                <div class="bar-percentage" id="barPercentage">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 結果画面 -->
+    <div id="resultScreen" class="screen hidden">
+        <div class="result-container">
+            <h2>取り調べ結果</h2>
+            <div class="result-rank" id="resultRank">A</div>
+            <div class="result-details">
+                <p><strong>スコア：</strong><span id="finalScore">0</span></p>
+                <p><strong>最大コンボ：</strong><span id="maxCombo">0</span></p>
+                <p><strong>Perfect：</strong><span id="perfectCount">0</span></p>
+                <p><strong>Good：</strong><span id="goodCount">0</span></p>
+                <p><strong>Miss：</strong><span id="missCount">0</span></p>
+            </div>
+            <div class="result-comment" id="resultComment">
+                素晴らしいタイミング感覚です！
+            </div>
+            <div class="result-buttons">
+                <button class="menu-button" onclick="retry()">もう一度</button>
+                <button class="menu-button" onclick="showTitle()">タイトルへ</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

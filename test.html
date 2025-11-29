@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デバッグテスト - 取り調べリズムゲーム</title>
+    <style>
+        body {
+            font-family: 'Yu Gothic', sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #667eea;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+        .error {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+        .success {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 デバッグテスト</h1>
+    
+    <div class="test-section">
+        <h2>1. データ読み込みテスト</h2>
+        <button onclick="testDataLoad()">データ読み込みテスト</button>
+        <div id="dataResult" class="status"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. 画面遷移テスト</h2>
+        <button onclick="window.location.href='index.html'">メインゲームを開く</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. 関数テスト</h2>
+        <button onclick="testFunctions()">関数存在チェック</button>
+        <div id="funcResult" class="status"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. ブラウザ互換性</h2>
+        <div id="browserInfo" class="status"></div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        // データ読み込みテスト
+        function testDataLoad() {
+            const resultDiv = document.getElementById('dataResult');
+            let html = '<h3>テスト結果：</h3>';
+            let allPassed = true;
+            
+            try {
+                // SCENARIOS の存在チェック
+                if (typeof SCENARIOS === 'undefined') {
+                    html += '<p class="error">❌ SCENARIOS が定義されていません</p>';
+                    allPassed = false;
+                } else {
+                    html += '<p class="success">✅ SCENARIOS 読み込み成功</p>';
+                    
+                    // 各難易度のチェック
+                    ['easy', 'normal', 'hard'].forEach(diff => {
+                        if (SCENARIOS[diff]) {
+                            html += `<p class="success">✅ ${diff.toUpperCase()} シナリオ: ${SCENARIOS[diff].notes.length}ノート</p>`;
+                        } else {
+                            html += `<p class="error">❌ ${diff.toUpperCase()} シナリオが見つかりません</p>`;
+                            allPassed = false;
+                        }
+                    });
+                }
+                
+                // 定数のチェック
+                if (typeof JUDGMENT_TIMING !== 'undefined') {
+                    html += `<p class="success">✅ JUDGMENT_TIMING: Perfect ${JUDGMENT_TIMING.perfect}s, Good ${JUDGMENT_TIMING.good}s</p>`;
+                } else {
+                    html += '<p class="error">❌ JUDGMENT_TIMING が定義されていません</p>';
+                    allPassed = false;
+                }
+                
+                if (typeof SCORE_VALUES !== 'undefined') {
+                    html += '<p class="success">✅ SCORE_VALUES 読み込み成功</p>';
+                } else {
+                    html += '<p class="error">❌ SCORE_VALUES が定義されていません</p>';
+                    allPassed = false;
+                }
+                
+                if (typeof RANK_COMMENTS !== 'undefined') {
+                    html += '<p class="success">✅ RANK_COMMENTS 読み込み成功</p>';
+                } else {
+                    html += '<p class="error">❌ RANK_COMMENTS が定義されていません</p>';
+                    allPassed = false;
+                }
+                
+                if (allPassed) {
+                    html += '<h3 class="success">🎉 全てのデータが正常に読み込まれました！</h3>';
+                }
+                
+            } catch (error) {
+                html += `<p class="error">❌ エラー: ${error.message}</p>`;
+            }
+            
+            resultDiv.innerHTML = html;
+        }
+        
+        // 関数テスト
+        function testFunctions() {
+            const resultDiv = document.getElementById('funcResult');
+            let html = '<h3>必要な関数の存在チェック：</h3>';
+            
+            const requiredFunctions = [
+                'showScreen', 'showTitle', 'showDifficultySelect', 'showHowToPlay',
+                'startGame', 'resetGameState', 'startGameLoop', 'gameLoop',
+                'spawnNote', 'updateNotes', 'updateDialogue', 'handleAction',
+                'handleNGAction', 'judgePerfect', 'judgeGood', 'judgeMiss',
+                'updateScore', 'updateCombo', 'showJudgment', 'endGame', 'retry'
+            ];
+            
+            // Note: ゲームが読み込まれていないので、ここでは確認できない
+            html += '<p>⚠️ このテストは index.html から実行する必要があります</p>';
+            html += '<p>以下の関数が必要です：</p><ul>';
+            
+            requiredFunctions.forEach(func => {
+                html += `<li>${func}</li>`;
+            });
+            
+            html += '</ul>';
+            resultDiv.innerHTML = html;
+        }
+        
+        // ブラウザ情報表示
+        document.addEventListener('DOMContentLoaded', () => {
+            const browserDiv = document.getElementById('browserInfo');
+            let html = '<h3>ブラウザ情報：</h3>';
+            html += `<p><strong>User Agent:</strong> ${navigator.userAgent}</p>`;
+            html += `<p><strong>言語:</strong> ${navigator.language}</p>`;
+            html += `<p><strong>画面サイズ:</strong> ${window.innerWidth} x ${window.innerHeight}</p>`;
+            html += `<p><strong>requestAnimationFrame:</strong> ${typeof requestAnimationFrame !== 'undefined' ? '✅ サポート' : '❌ 非サポート'}</p>`;
+            html += `<p><strong>localStorage:</strong> ${typeof localStorage !== 'undefined' ? '✅ サポート' : '❌ 非サポート'}</p>`;
+            browserDiv.innerHTML = html;
+        });
+    </script>
+</body>
+</html>

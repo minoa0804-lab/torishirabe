@@ -1,6 +1,8 @@
 // グローバル変数
 let currentScreen = 'title';
 let currentDifficulty = 'easy';
+// 遅延クリック時の減点レート（ポイント/秒）
+const LATE_PENALTY_PER_SEC = 1200;
 let gameState = {
     score: 0,
     combo: 0,
@@ -244,13 +246,14 @@ function handleCircleClick(wrapper) {
     
     // タイミング差
     const timeDiff = Math.abs(currentTime - targetTime);
+    const lateSec = Math.max(0, currentTime - targetTime);
     
     // 判定
     if (timeDiff <= JUDGMENT_TIMING.perfect) {
-        judgePerfect();
+        judgePerfect(lateSec);
         wrapper.classList.add('hit');
     } else if (timeDiff <= JUDGMENT_TIMING.good) {
-        judgeGood();
+        judgeGood(lateSec);
         wrapper.classList.add('hit');
     } else {
         judgeMiss();
@@ -267,12 +270,17 @@ function handleCircleClick(wrapper) {
 }
 
 // 判定処理
-function judgePerfect() {
+function judgePerfect(lateSec = 0) {
     gameState.perfect++;
     gameState.combo++;
     gameState.maxCombo = Math.max(gameState.maxCombo, gameState.combo);
     const comboBonus = Math.max(0, (gameState.combo - 1) * SCORE_VALUES.comboBonus);
     gameState.score += SCORE_VALUES.perfect + comboBonus;
+    // 遅延減点
+    if (lateSec > 0) {
+        const penalty = Math.round(lateSec * LATE_PENALTY_PER_SEC);
+        gameState.score -= penalty;
+    }
     updateScore();
     updateCombo();
     showJudgment('PERFECT!', 'perfect');
@@ -288,12 +296,17 @@ function judgePerfect() {
     }, 500);
 }
 
-function judgeGood() {
+function judgeGood(lateSec = 0) {
     gameState.good++;
     gameState.combo++;
     gameState.maxCombo = Math.max(gameState.maxCombo, gameState.combo);
     const comboBonus = Math.max(0, (gameState.combo - 1) * SCORE_VALUES.comboBonus);
     gameState.score += SCORE_VALUES.good + comboBonus;
+    // 遅延減点
+    if (lateSec > 0) {
+        const penalty = Math.round(lateSec * LATE_PENALTY_PER_SEC);
+        gameState.score -= penalty;
+    }
     updateScore();
     updateCombo();
     showJudgment('GOOD', 'good');
@@ -307,6 +320,14 @@ function judgeMiss() {
     gameState.combo = 0;
     updateCombo();
     showJudgment('MISS', 'miss');
+    // 被疑者シルエットを一瞬縮小（不信感の演出）
+    const silhouette = document.getElementById('personSilhouette');
+    if (silhouette) {
+        silhouette.classList.add('flinch');
+        setTimeout(() => {
+            silhouette.classList.remove('flinch');
+        }, 250);
+    }
 }
 
 // UI更新

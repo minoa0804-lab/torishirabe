@@ -263,6 +263,17 @@ body {
     100% { transform: scale(1); }
 }
 
+/* 不信感（ミス）時の一瞬縮小アニメーション */
+.person-silhouette.flinch {
+    animation: flinch 0.25s ease-out;
+}
+
+@keyframes flinch {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.92); }
+    100% { transform: scale(1); }
+}
+
 /* 円コンテナ */
 .circle-container {
     position: absolute;
